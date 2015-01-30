@@ -151,14 +151,14 @@ describe Hand do
       expect(Hand.winner([hand1, hand2])).to eq(hand1)
     end
 
-    # it 'should find a winning hand when hand value is tied' do
-    #   hand1 = Hand.new(deck, false)
-    #   hand1.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :king)]
-    #   hand2 = Hand.new(deck, false)
-    #   hand2.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :five)]
-    #
-    #   expect(Hand.winner([hand1, hand2])).to eq(hand1)
-    # end
+    it 'should find a winning hand when hand value is tied' do
+      hand1 = Hand.new(deck, false)
+      hand1.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :king)]
+      hand2 = Hand.new(deck, false)
+      hand2.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :five)]
+
+      expect(Hand.winner([hand1, hand2])).to eq(hand1)
+    end
 
     it 'should return all winning hands when hands are tied'
 

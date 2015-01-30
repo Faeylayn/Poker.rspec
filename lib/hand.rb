@@ -29,10 +29,19 @@ class Hand
       elsif HAND_VALUE.index(value1.keys[0]) < HAND_VALUE.index(value2.keys[0])
         hands << hand2
       else
-        high_card_hand1 = HAND_VALUE.index(hand1.find_high_card)
-        high_card_hand2 = hand2.find_high_card
-#if HAND_VALUE.index(high_card_hand1) > HAND_VALUE.index()
-  #      end
+        hand1_order = hand1.order_hand
+        hand2_order = hand2.order_hand
+        0.upto(hand1_order.count - 1) do |card_idx|
+          if hand1_order[card_idx] > hand2_order[card_idx]
+            hands << hand1
+            break
+          elsif hand1_order[card_idx] < hand2_order[card_idx]
+            hands << hand2
+            break
+          else
+            next
+          end
+        end
       end
     end
 
