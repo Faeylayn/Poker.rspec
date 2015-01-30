@@ -54,4 +54,29 @@ describe Hand do
     end
   end
 
+  describe "#get_value" do
+    it "should recognize pairs" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three)]
+      expect(hand.get_value).to eq({:pair => [:three]})
+    end
+
+    it "should recognize two pair"
+
+    it "should recognize three of a kind"
+
+    it "should recognize a straight"
+
+    it "should recognize a flush"
+
+    it "should recognize a full house"
+
+    it "should recognize four of a kind"
+
+    it "should recognize a straight flush"
+
+    it "should recognize high card"
+
+  end
+
 end
