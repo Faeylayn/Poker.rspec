@@ -30,6 +30,10 @@ describe Towers do
 
       expect{hanoi.move_disk(1,0)}.to raise_error("That tower is empty")
     end
+
+    it "shouldn't move to or from a tower that doesn't exist" do
+      expect{hanoi.move_disk(0,4)}.to raise_error("That tower doesn't exist")
+    end
   end
 
   describe "#finished?" do
@@ -48,13 +52,11 @@ describe Towers do
       expect(hanoi.parse_user_input("1,2")).to eq([1, 2])
     end
 
-    it "should check for valid input"
+    it "should check for valid input" do
+      expect{hanoi.parse_user_input("mystring")}.to raise_error(ArgumentError)
+    end
+
   end
 
-  describe "#game" do
-    # it "should prompt user input" do
-    #   expect hanoi.game to receive(:user_input)
-    # end
-  end
 
 end
