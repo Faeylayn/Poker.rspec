@@ -1,5 +1,43 @@
+
+
+
 class Hand
-  attr_accessor :cards
+
+  HAND_VALUE = [
+    :high_card,
+    :pair,
+    :two_pair,
+    :three_of_a_kind,
+    :straight,
+    :flush,
+    :full_house,
+    :four_of_a_kind,
+    :straight_flush
+  ]
+
+  attr_accessor :cards, :hand_order
+
+  def self.winner(hands)
+    until hands.count == 1
+      hand1 = hands.pop
+      hand2 = hands.pop
+
+      value1 = hand1.get_value
+      value2 = hand2.get_value
+      if HAND_VALUE.index(value1.keys[0]) > HAND_VALUE.index(value2.keys[0])
+        hands << hand1
+      elsif HAND_VALUE.index(value1.keys[0]) < HAND_VALUE.index(value2.keys[0])
+        hands << hand2
+      else
+        high_card_hand1 = HAND_VALUE.index(hand1.find_high_card)
+        high_card_hand2 = hand2.find_high_card
+#if HAND_VALUE.index(high_card_hand1) > HAND_VALUE.index()
+  #      end
+      end
+    end
+
+    hands[0]
+  end
 
   def initialize(deck, full=true)
     @deck = deck
@@ -16,6 +54,7 @@ class Hand
 
   def get_value
     highest_straight = find_straight
+    return {:straight_flush => [highest_straight] } if is_flush?(@cards[0].suit) && !highest_straight.nil?
     return {:straight => [highest_straight] } unless highest_straight.nil?
     return {:flush => @cards[0].suit } if is_flush?(@cards[0].suit)
     four_value = find_in(4)
@@ -27,6 +66,8 @@ class Hand
 
     return {:pair => pair_value } if pair_value.count == 1
     return {:two_pair => pair_value } if pair_value.count == 2
+    return {:high_card => [find_high_card] }
+
   end
 
   def find_in(num)
@@ -55,6 +96,29 @@ class Hand
 
     Card::POKER_VALUE.invert[poker_values.last]
   end
+
+  def find_high_card
+    poker_values = @cards.map { |card| card.poker_value }
+    poker_values.sort!
+    Card::POKER_VALUE.invert[poker_values.last]
+  end
+
+  def order_hand
+    values = @cards.map {|card| card.poker_value}
+    values.sort!.reverse!
+    if [:four_of_a_kind, :full_house, :two_pair, :three_of_a_kind, :pair].include?(get_value.keys[0])
+      values.sort do |v1, v2|
+        if values.count(v2) == values.count(v1)
+          v2 <=> v1
+        else
+         values.count(v2) <=> values.count(v1)
+        end
+      end
+    else
+      values.sort!.reverse!
+    end
+  end
+
 
   # def find_three
   #   values = Hash.new(0)

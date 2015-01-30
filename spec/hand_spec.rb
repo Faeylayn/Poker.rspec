@@ -113,10 +113,114 @@ describe Hand do
 
     end
 
-    it "should recognize a straight flush"
+    it "should recognize a straight flush" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:spades, :seven),
+                    Card.new(:spades, :four),
+                    Card.new(:spades, :five),
+                    Card.new(:spades, :six)]
 
-    it "should recognize high card"
+      expect(hand.get_value).to eq({:straight_flush => [:seven]})
+    end
+
+    it "should return high card if no other values present" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:clubs, :seven),
+                    Card.new(:spades, :four),
+                    Card.new(:spades, :ten),
+                    Card.new(:spades, :jack)]
+      expect(hand.get_value).to eq({:high_card => [:jack]})
+    end
 
   end
 
+
+  describe "#winner" do
+    it "should find a winning hand if a hand value is higher than another" do
+      hand1 = Hand.new(deck, false)
+      hand1.cards = [Card.new(:spades, :three),
+                     Card.new(:spades, :seven),
+                     Card.new(:spades, :four),
+                     Card.new(:spades, :ten),
+                     Card.new(:spades, :jack)]
+      hand2 = Hand.new(deck, false)
+      hand2.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three)]
+
+      expect(Hand.winner([hand1, hand2])).to eq(hand1)
+    end
+
+    # it 'should find a winning hand when hand value is tied' do
+    #   hand1 = Hand.new(deck, false)
+    #   hand1.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :king)]
+    #   hand2 = Hand.new(deck, false)
+    #   hand2.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :five)]
+    #
+    #   expect(Hand.winner([hand1, hand2])).to eq(hand1)
+    # end
+
+    it 'should return all winning hands when hands are tied'
+
+  end
+
+  describe "#order_hand" do
+    it "should order cards in a hand without any matching value" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                     Card.new(:spades, :seven),
+                     Card.new(:spades, :four),
+                     Card.new(:spades, :ten),
+                     Card.new(:spades, :jack)]
+
+      expect(hand.order_hand).to eq([11, 10, 7, 4, 3])
+    end
+
+    it "should order a four of a kind in front of other cards" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :three), Card.new(:clubs, :three), Card.new(:clubs, :king)]
+      expect(hand.order_hand).to eq([3, 3, 3, 3, 13])
+
+    end
+
+    it "should order full house properly" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:diamonds, :three),
+                    Card.new(:spades, :four),
+                    Card.new(:diamonds, :four),
+                    Card.new(:hearts, :three)]
+      expect(hand.order_hand).to eq([3, 3, 3, 4, 4])
+    end
+
+    it "should order two pair properly" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:diamonds, :four),
+                    Card.new(:spades, :three),
+                    Card.new(:diamonds, :four),
+                    Card.new(:hearts, :king)]
+      expect(hand.order_hand).to eq([4, 4, 3, 3, 13])
+    end
+
+    it "should order three-of-a-kind properly" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:spades, :ace),
+                    Card.new(:diamonds, :three),
+                    Card.new(:hearts, :three),
+                    Card.new(:diamonds, :queen)]
+      expect(hand.order_hand).to eq([3, 3, 3, 14, 12])
+    end
+    it "should order hands with a pair properly" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:diamonds, :three),
+                    Card.new(:spades, :seven),
+                    Card.new(:diamonds, :four),
+                    Card.new(:hearts, :king)]
+      expect(hand.order_hand).to eq([3, 3, 13, 7, 4])
+    end
+
+  end
 end
