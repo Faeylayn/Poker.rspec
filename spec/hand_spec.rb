@@ -61,17 +61,41 @@ describe Hand do
       expect(hand.get_value).to eq({:pair => [:three]})
     end
 
-    it "should recognize two pair"
+    it "should recognize two pair" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:diamonds, :three),
+                    Card.new(:spades, :four),
+                    Card.new(:diamonds, :four)]
+      expect(hand.get_value).to eq({:two_pair => [:three, :four]})
+    end
 
-    it "should recognize three of a kind"
+    it "should recognize three of a kind" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :three)]
+      expect(hand.get_value).to eq({:three_of_a_kind => [:three]})
+    end
 
     it "should recognize a straight"
 
     it "should recognize a flush"
 
-    it "should recognize a full house"
+    it "should recognize a full house" do
+    hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:diamonds, :three),
+                    Card.new(:spades, :four),
+                    Card.new(:diamonds, :four),
+                    Card.new(:hearts, :three)]
+      expect(hand.get_value).to eq({:full_house => [:three, :four]})
+    end
 
-    it "should recognize four of a kind"
+    it "should recognize four of a kind" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :three), Card.new(:clubs, :three)]
+      expect(hand.get_value).to eq({:four_of_a_kind => [:three]})
+
+    end
 
     it "should recognize a straight flush"
 
