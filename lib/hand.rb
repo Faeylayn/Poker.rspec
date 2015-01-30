@@ -18,6 +18,7 @@ class Hand
   attr_accessor :cards, :hand_order
 
   def self.winner(hands)
+    ties = []
     until hands.count == 1
       hand1 = hands.pop
       hand2 = hands.pop
@@ -28,24 +29,32 @@ class Hand
         hands << hand1
       elsif HAND_VALUE.index(value1.keys[0]) < HAND_VALUE.index(value2.keys[0])
         hands << hand2
+        ties = []
       else
         hand1_order = hand1.order_hand
         hand2_order = hand2.order_hand
+        new_tie = true
         0.upto(hand1_order.count - 1) do |card_idx|
           if hand1_order[card_idx] > hand2_order[card_idx]
             hands << hand1
+            new_tie = false
             break
           elsif hand1_order[card_idx] < hand2_order[card_idx]
             hands << hand2
+            new_tie = false
+            ties = []
             break
           else
             next
           end
         end
+        ties << hand2 if new_tie
+        hands << hand1 if new_tie
       end
     end
 
-    hands[0]
+    ties << hands[0]
+    ties
   end
 
   def initialize(deck, full=true)

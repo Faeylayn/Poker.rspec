@@ -148,7 +148,7 @@ describe Hand do
       hand2 = Hand.new(deck, false)
       hand2.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three)]
 
-      expect(Hand.winner([hand1, hand2])).to eq(hand1)
+      expect(Hand.winner([hand1, hand2])).to eq([hand1])
     end
 
     it 'should find a winning hand when hand value is tied' do
@@ -157,10 +157,26 @@ describe Hand do
       hand2 = Hand.new(deck, false)
       hand2.cards = [Card.new(:spades, :three), Card.new(:diamonds, :three), Card.new(:hearts, :five)]
 
-      expect(Hand.winner([hand1, hand2])).to eq(hand1)
+      expect(Hand.winner([hand1, hand2])).to eq([hand1])
     end
 
-    it 'should return all winning hands when hands are tied'
+    it 'should return all winning hands when hands are tied' do
+      hand1 = Hand.new(deck, false)
+      hand1.cards = [Card.new(:spades, :three),
+                    Card.new(:spades, :seven),
+                    Card.new(:spades, :four),
+                    Card.new(:spades, :ten),
+                    Card.new(:spades, :jack)]
+      hand2 = Hand.new(deck, false)
+      hand2.cards = [Card.new(:spades, :three),
+                    Card.new(:spades, :seven),
+                    Card.new(:spades, :four),
+                    Card.new(:spades, :ten),
+                    Card.new(:spades, :jack)]
+      expect(Hand.winner([hand1, hand2])).to eq([hand1, hand2])
+
+    end
+
 
   end
 
