@@ -15,6 +15,9 @@ class Hand
   end
 
   def get_value
+    highest_straight = find_straight
+    return {:straight => [highest_straight] } unless highest_straight.nil?
+    return {:flush => @cards[0].suit } if is_flush?(@cards[0].suit)
     four_value = find_in(4)
     return {:four_of_a_kind => four_value} if four_value.count == 1
     pair_value = find_in(2)
@@ -36,6 +39,21 @@ class Hand
     values.select do |value, count|
       count == num
     end.keys
+  end
+
+  def is_flush?(suit)
+    @cards.all? { |card| card.suit == suit }
+  end
+
+  def find_straight
+    poker_values = @cards.map { |card| card.poker_value }
+    poker_values.sort!
+
+    4.times do |card_idx|
+      return nil if poker_values[card_idx] + 1 != poker_values[card_idx + 1]
+    end
+
+    Card::POKER_VALUE.invert[poker_values.last]
   end
 
   # def find_three

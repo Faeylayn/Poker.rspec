@@ -76,12 +76,28 @@ describe Hand do
       expect(hand.get_value).to eq({:three_of_a_kind => [:three]})
     end
 
-    it "should recognize a straight"
+    it "should recognize a straight" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:clubs, :seven),
+                    Card.new(:spades, :four),
+                    Card.new(:spades, :five),
+                    Card.new(:spades, :six)]
+      expect(hand.get_value).to eq({:straight => [:seven]})
+    end
 
-    it "should recognize a flush"
+    it "should recognize a flush" do
+      hand = Hand.new(deck, false)
+      hand.cards = [Card.new(:spades, :three),
+                    Card.new(:spades, :seven),
+                    Card.new(:spades, :four),
+                    Card.new(:spades, :ten),
+                    Card.new(:spades, :jack)]
+      expect(hand.get_value).to eq({:flush => :spades})
+    end
 
     it "should recognize a full house" do
-    hand = Hand.new(deck, false)
+      hand = Hand.new(deck, false)
       hand.cards = [Card.new(:spades, :three),
                     Card.new(:diamonds, :three),
                     Card.new(:spades, :four),

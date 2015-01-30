@@ -61,11 +61,9 @@ class Card
     @suit, @value = suit, value
   end
   #
-  # def blackjack_value
-  #   raise "ace has special value" if value == :ace
-  #
-  #   BLACKJACK_VALUE[value]
-  # end
+  def poker_value
+    POKER_VALUE[value]
+  end
 
   # Compares two cards to see if they're equal in suit & value.
   def ==(other_card)
