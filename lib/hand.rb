@@ -7,6 +7,7 @@ class Hand
   end
 
   def discard(indices)
+    raise 'You can only discard up to 3 cards' if indices.count > 3
     indices.each do |idx|
       @cards[idx] = @deck.deal(1)
     end

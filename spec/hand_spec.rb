@@ -2,20 +2,17 @@ require 'hand'
 require 'card'
 
 describe Hand do
+  let(:deck) { double('deck')}
+  let(:cards) {[
+    Card.new(:spades, :three),
+    Card.new(:spades, :four),
+    Card.new(:spades, :five),
+    Card.new(:spades, :six),
+    Card.new(:spades, :seven)
+  ]}
 
 
   it "starts by drawing five cards" do
-    deck = double('deck')
-
-    cards = [
-      Card.new(:spades, :three),
-      Card.new(:spades, :four),
-      Card.new(:spades, :five),
-      Card.new(:spades, :six),
-      Card.new(:spades, :seven)
-
-    ]
-
 
     allow(deck).to receive(:deal).with(5).and_return(cards)
 
@@ -26,16 +23,6 @@ describe Hand do
 
   describe "#discard" do
     it "should get rid of cards that are being discarded" do
-      deck = double('deck')
-
-      cards = [
-        Card.new(:spades, :three),
-        Card.new(:spades, :four),
-        Card.new(:spades, :five),
-        Card.new(:spades, :six),
-        Card.new(:spades, :seven),
-        Card.new(:spades, :eight)
-      ]
 
       allow(deck).to receive(:deal).with(5).and_return(cards)
       allow(deck).to receive(:deal).with(1).and_return(cards.sample)
@@ -47,16 +34,6 @@ describe Hand do
     end
 
     it "should replace the discarded cards" do
-      deck = double('deck')
-
-      cards = [
-        Card.new(:spades, :three),
-        Card.new(:spades, :four),
-        Card.new(:spades, :five),
-        Card.new(:spades, :six),
-        Card.new(:spades, :seven),
-        Card.new(:spades, :eight)
-      ]
 
       redraw = Card.new(:spades, :eight)
       allow(deck).to receive(:deal).with(5).and_return(cards)
@@ -68,7 +45,13 @@ describe Hand do
       expect(hand.cards.include?(redraw)).to eq(true)
     end
 
-    it "should not discard more than three cards"
+    it "should not discard more than three cards" do
+      allow(deck).to receive(:deal).with(5).and_return(cards)
+      allow(deck).to receive(:deal).with(1).and_return(cards.sample)
+      hand = Hand.new(deck)
+      expect{hand.discard([0,1,2,3])}.to raise_error('You can only discard up to 3 cards')
+
+    end
   end
 
 end
