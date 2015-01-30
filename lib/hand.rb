@@ -6,5 +6,9 @@ class Hand
     @cards = @deck.deal(5)
   end
 
-
+  def discard(indices)
+    indices.each do |idx|
+      @cards[idx] = @deck.deal(1)
+    end
+  end
 end
